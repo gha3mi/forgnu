@@ -1,4 +1,4 @@
-!> author: Seyed Ali Ghasemi
+ !> author: Seyed Ali Ghasemi
 module forgnu
 
    implicit none
@@ -8,43 +8,52 @@ module forgnu
    public :: package
 
    !===============================================================================
+   !> This type represents a software package, with attributes describing its name,
+   !> version, file format, download link, configuration options, source directory,
+   !> build directory, installation directory, and prerequisites (required packages
+   !> and modules). It also includes procedures for downloading, extracting, configuring,
+   !> building, and installing the package, as well as for installing prerequisites.
    type :: package
-      character(len=:), allocatable :: name
-      character(len=:), allocatable :: version
-      character(len=:), allocatable :: file_format
-      character(len=:), allocatable :: download_link
-      character(len=:), allocatable :: configure_options
-      character(len=:), allocatable :: src_dir
-      character(len=:), allocatable :: src_path
-      character(len=:), allocatable :: build_dir
-      character(len=:), allocatable :: install_dir
-      character(len=:), allocatable :: prereqpackages
-      character(len=:), allocatable :: prereqmodules
+      character(len=:), allocatable :: name                 ! Name of the package
+      character(len=:), allocatable :: version              ! Version of the package
+      character(len=:), allocatable :: file_format          ! File format of the package
+      character(len=:), allocatable :: download_link        ! Download link for the package
+      character(len=:), allocatable :: configure_options    ! Configuration options for the package
+      character(len=:), allocatable :: src_dir              ! Directory for the package source code
+      character(len=:), allocatable :: src_path             ! Path for the package source code
+      character(len=:), allocatable :: build_dir            ! Directory for the package build
+      character(len=:), allocatable :: install_dir          ! Directory for the package installation
+      character(len=:), allocatable :: prereqpackages       ! Required packages for the package
+      character(len=:), allocatable :: prereqmodules        ! Required modules for the package
    contains
-      procedure :: set_name
-      procedure :: set_version
-      procedure :: set_file_format
-      procedure :: set_download_link
-      procedure :: set_configure_options
-      procedure :: set_src_dir
-      procedure :: set_install_dir
-      procedure :: set_src_path
-      procedure :: set_build_dir
-      procedure :: set_prereqpackages
-      procedure :: set_prereqmodules
+      ! Procedures for setting attributes
+      procedure :: set_name                  ! Set the name of the package
+      procedure :: set_version               ! Set the version of the package
+      procedure :: set_file_format           ! Set the file format of the package
+      procedure :: set_download_link         ! Set the download link for the package
+      procedure :: set_configure_options     ! Set the configuration options for the package
+      procedure :: set_src_dir               ! Set the directory for the package source code
+      procedure :: set_install_dir           ! Set the directory for the package installation
+      procedure :: set_src_path              ! Set the path for the package source code
+      procedure :: set_build_dir             ! Set the directory for the package build
+      procedure :: set_prereqpackages        ! Set the required packages for the package
+      procedure :: set_prereqmodules         ! Set the required modules for the package
 
-      procedure :: apt_install
-      procedure :: module_load
+      ! Procedures for installing and setting prerequisites
+      procedure :: apt_install               ! Install required packages using apt-get
+      procedure :: module_load               ! Load required modules using module load
 
-      procedure :: download
-      procedure :: extract
-      procedure :: prerequisites
-      procedure :: make_build_dir
-      procedure :: configure
-      procedure :: build
-      procedure :: install
+      ! Procedures for package management
+      procedure :: download                  ! Download the package source code
+      procedure :: extract                   ! Extract the package source code
+      procedure :: prerequisites             ! Install required packages and modules
+      procedure :: make_build_dir            ! Create the directory for the package build
+      procedure :: configure                 ! Configure the package
+      procedure :: build                     ! Build the package
+      procedure :: install                   ! Install the package
 
-      procedure :: dlloc
+      ! Procedures for deallocating memory
+      procedure :: dlloc                     ! Deallocates memory
    end type package
    !===============================================================================
 
@@ -169,16 +178,16 @@ contains
       class(package), intent(inout) :: this
       integer                       :: exstat
 
-      ! Download the package
+      ! ! Install required packages
       ! call execute_command_line("apt-get install "&
       !    //this%prereqpackages &
       !    , exitstat=exstat)
 
-      ! ! Check if download was successful
+      ! ! Check if installation was successful
       ! if (exstat /= 0) then
-      !    error stop ": File download failed. Please check the download link and try again."
+      !    error stop ": Failed to install required packages. Please check the package names and try again."
       ! else
-      !    print*,"Package downloaded successfully."
+      !    print*,"Required packages installed successfully."
       ! endif
    end subroutine apt_install
    !===============================================================================
@@ -190,16 +199,16 @@ contains
       class(package), intent(inout) :: this
       integer                       :: exstat
 
-      ! ! Download the package
+      ! ! Load the required modules
       ! call execute_command_line("ml -s "&
       !    //this%prereqmodules &
       !    , exitstat=exstat)
 
-      ! ! Check if download was successful
+      ! ! Check if the loading was successful
       ! if (exstat /= 0) then
-      !    error stop ": File download failed. Please check the download link and try again."
+      !    error stop ": Failed to load required modules. Please check the module names and try again."
       ! else
-      !    print*,"Package downloaded successfully."
+      !    print*,"Required modules loaded successfully."
       ! endif
    end subroutine module_load
    !===============================================================================
@@ -362,9 +371,9 @@ contains
          , exitstat=exstat)
 
       if (exstat /= 0) then
-         error stop ": Installation failed. Please check the build directory and try again."
+         error stop ": Package installation failed. Please check the prerequisite packages and try again."
       else
-         print*,"Installation completed successfully."
+         print*, "Package installed successfully."
       endif
    end subroutine install
    !===============================================================================
