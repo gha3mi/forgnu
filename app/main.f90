@@ -1,4 +1,4 @@
-program build_gcc
+program main
 
    use :: forgnu
 
@@ -165,4 +165,4 @@ program build_gcc
    call libtool%dlloc()
    ! =========================================================================================
 
-end program build_gcc
+end program main
